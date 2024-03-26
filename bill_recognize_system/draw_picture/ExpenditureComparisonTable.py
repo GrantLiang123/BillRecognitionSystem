@@ -59,25 +59,25 @@ def create_comparison_chart(data1, data2):
 
     return img_buffer
 
-if __name__ == "__main__":
-    data1 = [
-        ['2023-01-01', 1000],
-        ['2023-01-02', 1500],
-        ['2023-01-03', 1200],
-        ['2023-01-04', 1800],
-        ['2023-01-05', 2000],
-    ]
-
-    data2 = [
-        ['2023-02-01', 800],
-        ['2023-02-02', 1200],
-        ['2023-02-03', 1000],
-        ['2023-02-04', 1500],
-        ['2023-02-06', 1800],
-    ]
-
-    img_buffer = create_comparison_chart(data1, data2)
-
-    # 将图像保存到文件
-    with open('expenditure_comparison.png', 'wb') as f:
-        f.write(img_buffer.getvalue())
+# if __name__ == "__main__":
+#     data1 = [
+#         ['2023-01-01', 1000],
+#         ['2023-01-02', 1500],
+#         ['2023-01-03', 1200],
+#         ['2023-01-04', 1800],
+#         ['2023-01-05', 2000],
+#     ]
+#
+#     data2 = [
+#         ['2023-02-01', 800],
+#         ['2023-02-02', 1200],
+#         ['2023-02-03', 1000],
+#         ['2023-02-04', 1500],
+#         ['2023-02-06', 1800],
+#     ]
+#
+#     img_buffer = create_comparison_chart(data1, data2)
+#
+#     # 将图像保存到文件
+#     with open('expenditure_comparison.png', 'wb') as f:
+#         f.write(img_buffer.getvalue())

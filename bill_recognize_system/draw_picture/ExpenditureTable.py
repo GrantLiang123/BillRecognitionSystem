@@ -40,17 +40,17 @@ def create_line_chart(data):
 
     return img_buffer
 
-if __name__ == "__main__":
-    data = [
-        ['2023-01', 1000],
-        ['2023-02', 1500],
-        ['2023-03', 1200],
-        ['2023-04', 1800],
-        ['2023-05', 2000],
-    ]
-
-    img_buffer = create_line_chart(data)
-
-    # 将图像保存到文件
-    with open('expenditure_chart.png', 'wb') as f:
-        f.write(img_buffer.getvalue())
+# if __name__ == "__main__":
+#     data = [
+#         ['2023-01', 1000],
+#         ['2023-02', 1500],
+#         ['2023-03', 1200],
+#         ['2023-04', 1800],
+#         ['2023-05', 2000],
+#     ]
+#
+#     img_buffer = create_line_chart(data)
+#
+#     # 将图像保存到文件
+#     with open('expenditure_chart.png', 'wb') as f:
+#         f.write(img_buffer.getvalue())

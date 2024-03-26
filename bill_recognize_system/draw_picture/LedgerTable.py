@@ -46,15 +46,15 @@ def create_table_image(data):
 
     return img_buffer
 
-if __name__ == "__main__":
-    data = [
-        ['1', '2023-05-20', '购买设备', '固定资产', '', '10000', '10000'],
-        ['2', '2023-05-21', '销售商品', '主营业务收入', '5000', '', '15000'],
-        ['3', '2023-05-22', '支付工资', '应付职工薪酬', '', '8000', '7000'],
-    ]
-
-    img_buffer = create_table_image(data)
-
-    # 将图像保存到文件
-    with open('table.png', 'wb') as f:
-        f.write(img_buffer.getvalue())
+# if __name__ == "__main__":
+#     data = [
+#         ['1', '2023-05-20', '购买设备', '固定资产', '', '10000', '10000'],
+#         ['2', '2023-05-21', '销售商品', '主营业务收入', '5000', '', '15000'],
+#         ['3', '2023-05-22', '支付工资', '应付职工薪酬', '', '8000', '7000'],
+#     ]
+#
+#     img_buffer = create_table_image(data)
+#
+#     # 将图像保存到文件
+#     with open('table.png', 'wb') as f:
+#         f.write(img_buffer.getvalue())
