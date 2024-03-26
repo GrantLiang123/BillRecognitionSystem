@@ -20,7 +20,7 @@ def create_line_chart(data):
     ax.plot(times, incomes, marker='o')
 
     # 设置图像标题和轴标签
-    ax.set_title('收支曲线')
+    ax.set_title('支出曲线')
     ax.set_xlabel('时间')
     ax.set_ylabel('收入')
 
@@ -52,5 +52,5 @@ if __name__ == "__main__":
     img_buffer = create_line_chart(data)
 
     # 将图像保存到文件
-    with open('income_expenditure_chart.png', 'wb') as f:
+    with open('expenditure_chart.png', 'wb') as f:
         f.write(img_buffer.getvalue())
