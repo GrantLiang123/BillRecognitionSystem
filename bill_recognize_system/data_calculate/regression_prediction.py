@@ -244,7 +244,6 @@ def bill_predict(y_real: list, is_complex_model: bool = False, forecast_days: in
 
 
 if __name__ == '__main__':
-    # X_test = np.linspace(2009, 2020, 100).reshape(-1, 1) - 2008
     rep = RegressionPrediction(forecast_days=4, use_model_name='elastic_net')
     y = [1, 23, 32, 4, 53]
     y_p = rep.train_model_complex(y)
