@@ -11,7 +11,9 @@ import bill_recognize_system.draw_picture.ForecastIncomeTable as FI;
 import bill_recognize_system.draw_picture.ForecastExpenditureTable as FE;
 import bill_recognize_system.draw_picture.ExpenditureTable as Ex;
 import bill_recognize_system.draw_picture.ExpenditureComparisonTable as EC;
-from bill_recognize_system.data_calculate import bill_predict
+from bill_recognize_system.data_calculate.regression_prediction import bill_predict
+# from bill_recognize_system.data_calculate.regression_prediction import bill_predict
+
 
 app = Flask(__name__)
 

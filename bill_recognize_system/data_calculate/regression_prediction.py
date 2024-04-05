@@ -102,25 +102,44 @@ class RegressionPrediction:
         self.forecast_days: int = forecast_days  # 预测天数
         self.use_model_name = ModelName[use_model_name]  # 使用的回归模型
         self.return_list = ['y_predict', 'is_correct', 'predict_accuracy', 'model_name']  # API返回的JSON标签
+    #
+    # def select_model(self, use_model_name):
+    #     """
+    #     通过枚举值，返回对应的模型对象。
+    #     :param use_model_name: 使用的模型的枚举值。
+    #     :return: 模型对象
+    #     :rtype BayesianRidge | LinearRegression | ElasticNet | SVR | GradientBoostingRegressor
+    #     """
+    #     match use_model_name:
+    #         case ModelName.bayesian_ridge:
+    #             return self.model_br
+    #         case ModelName.linear_regression:
+    #             return self.model_lr
+    #         case ModelName.elastic_net:
+    #             return self.model_etc
+    #         case ModelName.svr:
+    #             return self.model_svr
+    #         case ModelName.gradient_boosting_regressor:
+    #             return self.model_gbr
 
     def select_model(self, use_model_name):
         """
-        通过枚举值，返回对应的模型对象。
+        通过枚举值,返回对应的模型对象。
         :param use_model_name: 使用的模型的枚举值。
         :return: 模型对象
         :rtype BayesianRidge | LinearRegression | ElasticNet | SVR | GradientBoostingRegressor
         """
-        match use_model_name:
-            case ModelName.bayesian_ridge:
-                return self.model_br
-            case ModelName.linear_regression:
-                return self.model_lr
-            case ModelName.elastic_net:
-                return self.model_etc
-            case ModelName.svr:
-                return self.model_svr
-            case ModelName.gradient_boosting_regressor:
-                return self.model_gbr
+        if use_model_name == ModelName.bayesian_ridge:
+            return self.model_br
+        elif use_model_name == ModelName.linear_regression:
+            return self.model_lr
+        elif use_model_name == ModelName.elastic_net:
+            return self.model_etc
+        elif use_model_name == ModelName.svr:
+            return self.model_svr
+        elif use_model_name == ModelName.gradient_boosting_regressor:
+            return self.model_gbr
+
 
     def train_model_easy(self, y_train_initial: list):
         """

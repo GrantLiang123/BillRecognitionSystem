@@ -10,7 +10,8 @@ class IncomeComparisonTable:
     def __init__(self):
         # 使用支持中文的字体
         plt.rcParams['font.family'] = 'Arial Unicode MS'
-    def create_comparison_chart(self,data1, data2):
+
+    def create_comparison_chart(self, data1, data2):
         # 检查输入数据的维度是否正确
         if len(data1) == 0 or len(data1[0]) != 2 or len(data2) == 0 or len(data2[0]) != 2:
             raise ValueError("输入的列表维度应为 n×2")
@@ -37,16 +38,28 @@ class IncomeComparisonTable:
         fig, ax = plt.subplots(figsize=(10, 6))
 
         # 绘制折线图
-        ax.plot(days, incomes1, marker='o', label='数据1')
-        ax.plot(days, incomes2, marker='o', label='数据2')
+        line1, = ax.plot(days, incomes1, marker='o', linewidth=2, markersize=8, color='#2c7fb8', label='数据1')
+        line2, = ax.plot(days, incomes2, marker='o', linewidth=2, markersize=8, color='#ff7f0e', label='数据2')
+
+        # 在每个数据点上添加数值标签
+        for i, income in enumerate(incomes1):
+            ax.annotate(f'{income}', (days[i], income), textcoords="offset points", xytext=(0, 10), ha='center')
+        for i, income in enumerate(incomes2):
+            ax.annotate(f'{income}', (days[i], income), textcoords="offset points", xytext=(0, -15), ha='center')
 
         # 设置图像标题和轴标签
-        ax.set_title('收入对比图')
-        ax.set_xlabel('日子')
-        ax.set_ylabel('收入')
+        ax.set_title('收入对比', fontsize=18, fontweight='bold', color='#2c7fb8')
+        ax.set_xlabel('日期', fontsize=14)
+        ax.set_ylabel('收入', fontsize=14)
 
-        # 添加图例
-        ax.legend()
+        # 设置图例
+        ax.legend(handles=[line1, line2], loc='upper left', fontsize=12)
+
+        # 设置网格线
+        ax.grid(True, linestyle='--', alpha=0.7)
+
+        # 设置背景颜色
+        ax.set_facecolor('#f0f0f0')
 
         # 自动调整刻度标签的旋转角度
         plt.xticks(rotation=45, ha='right')

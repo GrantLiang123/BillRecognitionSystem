@@ -2,9 +2,7 @@ import io
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import matplotlib
-
-matplotlib.font_manager._rebuild()
-
+# matplotlib.font_manager._rebuild()
 
 class IncomeTable:
     def __init__(self):
@@ -24,12 +22,25 @@ class IncomeTable:
         fig, ax = plt.subplots(figsize=(10, 6))
 
         # 绘制折线图
-        ax.plot(times, incomes, marker='o')
+        line, = ax.plot(times, incomes, marker='o', linewidth=2, markersize=8, color='#2c7fb8')
+
+        # 在每个数据点上添加数值标签
+        for i, income in enumerate(incomes):
+            ax.annotate(f'{income}', (times[i], income), textcoords="offset points", xytext=(0, 10), ha='center')
 
         # 设置图像标题和轴标签
-        ax.set_title('收入曲线')
-        ax.set_xlabel('时间')
-        ax.set_ylabel('收入')
+        ax.set_title('收入曲线', fontsize=18, fontweight='bold', color='#2c7fb8')
+        ax.set_xlabel('日期', fontsize=14)
+        ax.set_ylabel('收入', fontsize=14)
+
+        # 设置图例
+        ax.legend([line], ['收入'], loc='upper left', fontsize=12)
+
+        # 设置网格线
+        ax.grid(True, linestyle='--', alpha=0.7)
+
+        # 设置背景颜色
+        ax.set_facecolor('#f0f0f0')
 
         # 自动调整刻度标签的旋转角度
         plt.xticks(rotation=45, ha='right')
@@ -47,17 +58,17 @@ class IncomeTable:
 
         return img_buffer
 
-# if __name__ == "__main__":
-#     data = [
-#         ['2023-01', 1000],
-#         ['2023-02', 1500],
-#         ['2023-03', 1200],
-#         ['2023-04', 1800],
-#         ['2023-05', 2000],
-#     ]
-#
-#     img_buffer = create_line_chart(data)
-#
-#     # 将图像保存到文件
-#     with open('income_chart.png', 'wb') as f:
-#         f.write(img_buffer.getvalue())
+if __name__ == "__main__":
+    data = [
+        ['2023-01', 1000],
+        ['2023-02', 1500],
+        ['2023-03', 1200],
+        ['2023-04', 1800],
+        ['2023-05', 2000],
+    ]
+    a=IncomeTable();
+    img_buffer = a.create_line_chart(data)
+
+    # 将图像保存到文件
+    with open('income_chart.png', 'wb') as f:
+        f.write(img_buffer.getvalue())
