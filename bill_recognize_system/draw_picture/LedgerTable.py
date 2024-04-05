@@ -1,11 +1,18 @@
 import io
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+import matplotlib
+matplotlib.font_manager._rebuild()
 
 class LedgerTable:
     def __init__(self):
+        # font_list = fm.findSystemFonts(fontpaths=None, fontext='ttf')
+        # for font_path in font_list:
+        #     print(font_path)
         # 使用支持中文的字体
+        #font_path = '/usr/share/fonts/ArialUnicodeMS.ttf'
+        #self.font_prop = fm.FontProperties(fname=font_path)
         plt.rcParams['font.family'] = 'Arial Unicode MS'
-
     def create_table_image(self, data):
         # 检查输入数据的维度是否正确
         if len(data) == 0 or len(data[0]) != 7:

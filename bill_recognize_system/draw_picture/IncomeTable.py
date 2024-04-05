@@ -1,11 +1,17 @@
-import matplotlib.pyplot as plt
 import io
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+import matplotlib
+
+matplotlib.font_manager._rebuild()
+
 
 class IncomeTable:
     def __init__(self):
         # 使用支持中文的字体
         plt.rcParams['font.family'] = 'Arial Unicode MS'
-    def create_line_chart(data):
+
+    def create_line_chart(self, data):
         # 检查输入数据的维度是否正确
         if len(data) == 0 or len(data[0]) != 2:
             raise ValueError("输入的列表维度应为 n×2")

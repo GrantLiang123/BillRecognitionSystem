@@ -1,5 +1,8 @@
-import matplotlib.pyplot as plt
 import io
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+import matplotlib
+matplotlib.font_manager._rebuild()
 from collections import defaultdict
 
 class ExpenditureComparisonTable:
@@ -7,7 +10,7 @@ class ExpenditureComparisonTable:
         # 使用支持中文的字体
         plt.rcParams['font.family'] = 'Arial Unicode MS'
 
-    def create_comparison_chart(data1, data2):
+    def create_comparison_chart(self,data1, data2):
         # 检查输入数据的维度是否正确
         if len(data1) == 0 or len(data1[0]) != 2 or len(data2) == 0 or len(data2[0]) != 2:
             raise ValueError("输入的列表维度应为 n×2")
