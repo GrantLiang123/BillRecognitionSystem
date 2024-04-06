@@ -126,6 +126,7 @@ def regression_predict():
     if use_model_name is None:
         use_model_name='linear_regression'
 
+
     result = bill_predict(y_real, is_complex_model, forecast_days, use_model_name)
     # 将结果作为 JSON 响应返回
     return result
