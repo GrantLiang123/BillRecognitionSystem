@@ -120,11 +120,13 @@ def regression_predict():
     use_model_name = request.json['use_model_name']
 
     if is_complex_model is None:
-        result = bill_predict(y_real)
-    # 创建 RegressionPrediction 实例
-    else:
-        result = bill_predict(y_real, is_complex_model, forecast_days, use_model_name)
+        is_complex_model=False
+    if forecast_days is None:
+        forecast_days=3;
+    if use_model_name is None:
+        use_model_name='linear_regression'
 
+    result = bill_predict(y_real, is_complex_model, forecast_days, use_model_name)
     # 将结果作为 JSON 响应返回
     return result
 
