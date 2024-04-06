@@ -113,6 +113,7 @@ def create_expenditure_comparison():
 
 @app.route('/MaNongBbq/regressionPredict', methods=['POST'])
 def regression_predict():
+
     # 从请求的 JSON 数据中获取参数
     y_real = request.json['y_real']
     is_complex_model = request.json['is_complex_model']
@@ -125,7 +126,6 @@ def regression_predict():
         forecast_days=3;
     if use_model_name is None:
         use_model_name='linear_regression'
-
 
     result = bill_predict(y_real, is_complex_model, forecast_days, use_model_name)
     # 将结果作为 JSON 响应返回
