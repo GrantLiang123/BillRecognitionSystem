@@ -12,6 +12,7 @@ import bill_recognize_system.draw_picture.ForecastExpenditureTable as FE;
 import bill_recognize_system.draw_picture.ExpenditureTable as Ex;
 import bill_recognize_system.draw_picture.ExpenditureComparisonTable as EC;
 from bill_recognize_system.data_calculate.regression_prediction import bill_predict
+
 # from bill_recognize_system.data_calculate.regression_prediction import bill_predict
 
 
@@ -118,8 +119,11 @@ def regression_predict():
     forecast_days = request.json['forecast_days']
     use_model_name = request.json['use_model_name']
 
+    if is_complex_model is None:
+        result = bill_predict(y_real)
     # 创建 RegressionPrediction 实例
-    result=bill_predict(y_real, is_complex_model, forecast_days,use_model_name)
+    else:
+        result = bill_predict(y_real, is_complex_model, forecast_days, use_model_name)
 
     # 将结果作为 JSON 响应返回
     return result
