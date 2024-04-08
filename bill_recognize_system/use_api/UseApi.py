@@ -3,15 +3,17 @@ import sys
 sys.path.append('/home/lighthouse/BillRecognitionSystem')
 from flask import Flask, jsonify, request, send_file
 # from flask_cors import CORS
-import bill_recognize_system.draw_picture.LedgerTable as Le;
-import bill_recognize_system.draw_picture.IncomeTable as In;
-import bill_recognize_system.draw_picture.IncomeComparisonTable as IC;
-import bill_recognize_system.draw_picture.IncomeAndExpenditureStatement as IE;
-import bill_recognize_system.draw_picture.ForecastIncomeTable as FI;
-import bill_recognize_system.draw_picture.ForecastExpenditureTable as FE;
-import bill_recognize_system.draw_picture.ExpenditureTable as Ex;
-import bill_recognize_system.draw_picture.ExpenditureComparisonTable as EC;
+import bill_recognize_system.draw_picture.LedgerTable as Le
+import bill_recognize_system.draw_picture.IncomeTable as In
+import bill_recognize_system.draw_picture.IncomeComparisonTable as IC
+import bill_recognize_system.draw_picture.IncomeAndExpenditureStatement as IE
+import bill_recognize_system.draw_picture.ForecastIncomeTable as FI
+import bill_recognize_system.draw_picture.ForecastExpenditureTable as FE
+import bill_recognize_system.draw_picture.ExpenditureTable as Ex
+import bill_recognize_system.draw_picture.ExpenditureComparisonTable as EC
+import bill_recognize_system.data_operate.generate_xlsx as GX
 from bill_recognize_system.data_calculate.regression_prediction import bill_predict
+
 
 # from bill_recognize_system.data_calculate.regression_prediction import bill_predict
 
@@ -130,6 +132,14 @@ def regression_predict():
     result = bill_predict(y_real, is_complex_model, forecast_days, use_model_name)
     # 将结果作为 JSON 响应返回
     return result
+
+
+@app.route('/MaNongBbq/generateXlsx', methods=['POST'])
+def generate_xlsx():
+    data = request.json  # 从POST请求中获取JSON数据
+    a=GX.GenerateExcel()
+    file_stream = a.generate_excel(data, 'example.xlsx')
+    return send_file(file_stream, attachment_filename='example.xlsx', as_attachment=True)
 
 
 if __name__ == '__main__':

@@ -66,7 +66,7 @@ if __name__ == "__main__":
         ['2023-04', 1800],
         ['2023-05', 2000],
     ]
-    a=IncomeTable();
+    a=IncomeTable()
     img_buffer = a.create_line_chart(data)
 
     # 将图像保存到文件
