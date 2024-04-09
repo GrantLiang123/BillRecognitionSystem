@@ -2,7 +2,7 @@ import io
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import matplotlib
-# matplotlib.font_manager._rebuild()
+from datetime import datetime
 
 class IncomeTable:
     def __init__(self):
@@ -10,9 +10,24 @@ class IncomeTable:
         plt.rcParams['font.family'] = 'Arial Unicode MS'
 
     def create_line_chart(self, data):
-        # 检查输入数据的维度是否正确
-        if len(data) == 0 or len(data[0]) != 2:
-            raise ValueError("输入的列表维度应为 n×2")
+        # 过滤掉日期或收入为空的数据
+        data = [row for row in data if row[0] and row[1]]
+        # 将收入转换为浮点数
+        data = [[row[0], float(row[1])] for row in data]
+
+        # 将日期字符串转换为日期对象,并按日期排序
+        data = sorted(data, key=lambda x: datetime.strptime(x[0], '%Y年%m月%d日'))
+
+        # 合并相同日期的收入
+        merged_data = {}
+        for row in data:
+            if row[0] in merged_data:
+                merged_data[row[0]] += row[1]
+            else:
+                merged_data[row[0]] = row[1]
+
+        # 将合并后的数据转换为列表
+        data = [[date, income] for date, income in merged_data.items()]
 
         # 从输入数据中提取时间和收入
         times = [row[0] for row in data]
@@ -60,11 +75,12 @@ class IncomeTable:
 
 if __name__ == "__main__":
     data = [
-        ['2023-01', 1000],
-        ['2023-02', 1500],
-        ['2023-03', 1200],
-        ['2023-04', 1800],
-        ['2023-05', 2000],
+        ['2023年01月9日', "1000"],
+        ['2023年2月5日', "1500"],
+        ['2023年01月9日', "1200"],
+        ['2023年04月3日', "1800"],
+        ['2023年03月4日', "2000"],
+        ['',"2000"]
     ]
     a=IncomeTable()
     img_buffer = a.create_line_chart(data)
