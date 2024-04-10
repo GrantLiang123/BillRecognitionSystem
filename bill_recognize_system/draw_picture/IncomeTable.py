@@ -80,7 +80,6 @@ if __name__ == "__main__":
         ['2023年01月9日', "1200"],
         ['2023年04月3日', "1800"],
         ['2023年03月4日', "2000"],
-        ['',"2000"]
     ]
     a=IncomeTable()
     img_buffer = a.create_line_chart(data)

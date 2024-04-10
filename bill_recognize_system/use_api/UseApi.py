@@ -13,7 +13,7 @@ import bill_recognize_system.draw_picture.ExpenditureTable as Ex
 import bill_recognize_system.draw_picture.ExpenditureComparisonTable as EC
 import bill_recognize_system.data_operate.generate_xlsx as GX
 from bill_recognize_system.data_calculate.regression_prediction import bill_predict
-
+import json
 
 # from bill_recognize_system.data_calculate.regression_prediction import bill_predict
 
@@ -46,13 +46,12 @@ def create_income_table():
 @app.route('/MaNongBbq/incomeComparison', methods=['POST'])
 def create_income_comparison():
     data1 = request.json['data1']
-    data2 = request.json['data2']
 
     # 创建 IncomeComparisonTable 实例
     comparison_table = IC.IncomeComparisonTable()
 
     # 调用 create_comparison_chart 方法生成图像
-    img_buffer = comparison_table.create_comparison_chart(data1, data2)
+    img_buffer = comparison_table.create_comparison_chart(data1)
 
     # 将图像作为文件发送给客户端
     return send_file(img_buffer, mimetype='image/png')
@@ -68,24 +67,25 @@ def create_income_expenditure():
     return send_file(image_data, mimetype='image/png')
 
 
-@app.route('/MaNongBbq/forecastIncome', methods=['POST'])
-def create_forecast_income():
-    data = request.json['data']
+# @app.route('/MaNongBbq/forecastIncome', methods=['POST'])
+# def create_forecast_income():
+#     data = request.json['data']
+#
+#
+#     creator = FI.ForecastIncomeTable()
+#     image_data = creator.create_line_chart(data)
+#
+#     return send_file(image_data, mimetype='image/png')
 
-    creator = FI.ForecastIncomeTable()
-    image_data = creator.create_line_chart(data)
 
-    return send_file(image_data, mimetype='image/png')
-
-
-@app.route('/MaNongBbq/forecastExpenditure', methods=['POST'])
-def create_forecast_expenditure():
-    data = request.json['data']
-
-    creator = FE.ForecastExpenditure()
-    image_data = creator.create_line_chart(data)
-
-    return send_file(image_data, mimetype='image/png')
+# @app.route('/MaNongBbq/forecastExpenditure', methods=['POST'])
+# def create_forecast_expenditure():
+#     data = request.json['data']
+#
+#     creator = FE.ForecastExpenditure()
+#     image_data = creator.create_line_chart(data)
+#
+#     return send_file(image_data, mimetype='image/png')
 
 
 @app.route('/MaNongBbq/expenditureTable', methods=['POST'])
@@ -101,13 +101,12 @@ def create_expenditure_table():
 @app.route('/MaNongBbq/expenditureComparison', methods=['POST'])
 def create_expenditure_comparison():
     data1 = request.json['data1']
-    data2 = request.json['data2']
 
     # 创建 IncomeComparisonTable 实例
-    comparison_table = EC.ExpenditureComparisonTable();
+    comparison_table = EC.ExpenditureComparisonTable()
 
     # 调用 create_comparison_chart 方法生成图像
-    img_buffer = comparison_table.create_comparison_chart(data1, data2)
+    img_buffer = comparison_table.create_comparison_chart(data1)
 
     # 将图像作为文件发送给客户端
     return send_file(img_buffer, mimetype='image/png')
@@ -115,30 +114,51 @@ def create_expenditure_comparison():
 
 @app.route('/MaNongBbq/regressionPredict', methods=['POST'])
 def regression_predict():
-
     # 从请求的 JSON 数据中获取参数
     y_real = request.json['y_real']
     is_complex_model = request.json['is_complex_model']
     forecast_days = request.json['forecast_days']
     use_model_name = request.json['use_model_name']
+    is_income = request.json['is_income']
+    date_time = request.json['date_time']
 
     if is_complex_model is None:
-        is_complex_model=False
+        is_complex_model = False
     if forecast_days is None:
-        forecast_days=3;
+        forecast_days = 3
     if use_model_name is None:
-        use_model_name='linear_regression'
+        use_model_name = 'linear_regression'
+
+    mer_list = list(zip(date_time, y_real))
 
     result = bill_predict(y_real, is_complex_model, forecast_days, use_model_name)
     # 将结果作为 JSON 响应返回
+    result_dict = json.loads(result)
+    y_predict = result_dict['y_predict']
+
+    if is_income is True:
+        a1 = FI.ForecastIncomeTable()
+        re1 = a1.create_line_chart(mer_list, y_predict)
+    else:
+        a2 = FE.ForecastExpenditure()
+        re2 = a2.create_line_chart(mer_list, y_predict)
+
     return result
 
 
-@app.route('/MaNongBbq/generateXlsx', methods=['POST'])
-def generate_xlsx():
-    data = request.json  # 从POST请求中获取JSON数据
-    a=GX.GenerateExcel()
-    file_stream = a.generate_excel(data, 'example.xlsx')
+@app.route('/MaNongBbq/generateXlsx01', methods=['POST'])
+def generate_xlsx01():
+    data = request.json['data']  # 从POST请求中获取JSON数据
+    a = GX.GenerateExcel()
+    file_stream = a.generate_excel_1(data, 'example.xlsx')
+    return send_file(file_stream, attachment_filename='example.xlsx', as_attachment=True)
+
+
+@app.route('/MaNongBbq/generateXlsx02', methods=['POST'])
+def generate_xlsx02():
+    data = request.json['data']  # 从POST请求中获取JSON数据
+    a = GX.GenerateExcel()
+    file_stream = a.generate_excel_2(data, 'example.xlsx')
     return send_file(file_stream, attachment_filename='example.xlsx', as_attachment=True)
 
 

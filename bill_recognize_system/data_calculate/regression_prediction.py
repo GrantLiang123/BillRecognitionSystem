@@ -266,4 +266,7 @@ if __name__ == '__main__':
     # rep = RegressionPrediction(forecast_days=4, use_model_name='elastic_net')
     y = [12, 23, 32, 14, 53]
     y_p = bill_predict(y, is_complex_model=True, )
-    print(y_p)
+    result_dict=json.loads(y_p)
+    y_predict = result_dict['y_predict']
+
+    print(y_predict)
