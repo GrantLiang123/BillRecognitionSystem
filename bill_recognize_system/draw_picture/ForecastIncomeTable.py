@@ -18,6 +18,7 @@ class ForecastIncomeTable:
         times = [row[0] for row in data]
         incomes = [row[1] for row in data]
 
+
         # 创建一个新的图像
         fig, ax = plt.subplots(figsize=(10, 6))
 

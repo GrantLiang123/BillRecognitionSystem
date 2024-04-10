@@ -21,6 +21,7 @@ class ForecastExpenditure:
         # 创建一个新的图像
         fig, ax = plt.subplots(figsize=(10, 6))
 
+
         # 绘制折线图
         line, = ax.plot(times, incomes, marker='o', linewidth=2, markersize=8, color='#2c7fb8')
 

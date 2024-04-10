@@ -35,68 +35,62 @@ class IncomeComparisonTable:
         data_current_month = [[row[0], float(row[1])] for row in data_current_month]
         data_previous_month = [[row[0], float(row[1])] for row in data_previous_month]
 
-        # 将日期字符串转换为日期对象,并按日期排序
-        data_current_month = sorted(data_current_month, key=lambda x: datetime.strptime(x[0], '%Y年%m月%d日'))
-        data_previous_month = sorted(data_previous_month, key=lambda x: datetime.strptime(x[0], '%Y年%m月%d日'))
-
         # 合并相同日期的收入
-        merged_data_current_month = {}
+        merged_data_current_month = defaultdict(float)
         for row in data_current_month:
-            if row[0] in merged_data_current_month:
-                merged_data_current_month[row[0]] += row[1]
-            else:
-                merged_data_current_month[row[0]] = row[1]
+            merged_data_current_month[datetime.strptime(row[0], '%Y年%m月%d日').day] += row[1]
 
-        merged_data_previous_month = {}
+        merged_data_previous_month = defaultdict(float)
         for row in data_previous_month:
-            if row[0] in merged_data_previous_month:
-                merged_data_previous_month[row[0]] += row[1]
-            else:
-                merged_data_previous_month[row[0]] = row[1]
+            merged_data_previous_month[datetime.strptime(row[0], '%Y年%m月%d日').day] += row[1]
 
-        # 获取所有日期
-        all_dates = sorted(set(merged_data_current_month.keys()) | set(merged_data_previous_month.keys()))
+        # 创建一个包含30天的列表
+        days = list(range(1, 31))
 
-        # 创建收入列表,按日子顺序排列
-        incomes_current_month = [merged_data_current_month.get(date, 0) for date in all_dates]
-        incomes_previous_month = [merged_data_previous_month.get(date, 0) for date in all_dates]
-
-        # 提取日期的日部分
-        days = [datetime.strptime(date, '%Y年%m月%d日').strftime('%d') for date in all_dates]
-
+        # 创建收入列表,按日期顺序排列
+        incomes_current_month = [merged_data_current_month[day] for day in days]
+        incomes_previous_month = [merged_data_previous_month[day] for day in days]
 
         # 创建一个新的图像
-        fig, ax = plt.subplots(figsize=(10, 6))
+        fig, ax = plt.subplots(figsize=(12, 6))
 
-        # 绘制折线图
-        line1, = ax.plot(days, incomes_current_month, marker='o', linewidth=2, markersize=8, color='#2c7fb8',
-                         label='本月')
-        line2, = ax.plot(days, incomes_previous_month, marker='o', linewidth=2, markersize=8, color='#ff7f0e',
-                         label='上月')
+        # 设置柱状图的宽度
+        bar_width = 0.35
 
-        # 在每个数据点上添加数值标签
-        for i, income in enumerate(incomes_current_month):
-            ax.annotate(f'{income}', (days[i], income), textcoords="offset points", xytext=(0, 10), ha='center')
-        for i, income in enumerate(incomes_previous_month):
-            ax.annotate(f'{income}', (days[i], income), textcoords="offset points", xytext=(0, -15), ha='center')
+        # 绘制柱状图
+        bars_current_month = ax.bar([day - bar_width/2 for day in days], incomes_current_month, width=bar_width, color='#2c7fb8', label=f'{current_year}年{current_month}月')
+        bars_previous_month = ax.bar([day + bar_width/2 for day in days], incomes_previous_month, width=bar_width, color='#ff7f0e', label=f'{current_year}年{current_month-1}月')
 
+        # 在柱子上添加数据标签
+        for bar in bars_current_month:
+            height = bar.get_height()
+            if height != 0:
+                ax.annotate(f'{height:.2f}', xy=(bar.get_x() + bar.get_width() / 2, height),
+                            xytext=(0, 3), textcoords="offset points", ha='center', va='bottom')
+
+        for bar in bars_previous_month:
+            height = bar.get_height()
+            if height != 0:
+                ax.annotate(f'{height:.2f}', xy=(bar.get_x() + bar.get_width() / 2, height),
+                            xytext=(0, 3), textcoords="offset points", ha='center', va='bottom')
 
         # 设置图像标题和轴标签
         ax.set_title('收入对比', fontsize=18, fontweight='bold', color='#2c7fb8')
         ax.set_xlabel('日期', fontsize=14)
         ax.set_ylabel('收入', fontsize=14)
 
+        # 设置x轴刻度
+        ax.set_xticks(days)
+        ax.set_xticklabels(days)
+
         # 设置图例
-        ax.legend(handles=[line1, line2], loc='upper left', fontsize=12)
+        ax.legend(fontsize=12)
 
         # 设置网格线
         ax.grid(True, linestyle='--', alpha=0.7)
 
         # 设置背景颜色
         ax.set_facecolor('#f0f0f0')
-
-        # 自动调整刻度标签的旋转角度
-        plt.xticks(rotation=45, ha='right')
 
         # 自动调整图像布局
         plt.tight_layout()
@@ -116,6 +110,7 @@ if __name__ == "__main__":
         ['2024年01月9日', "1000"],
         ['2024年3月4日', "1500"],
         ['2024年03月9日', "1200"],
+        ['2024年04月3日', "1800"],
         ['2024年04月3日', "1800"],
         ['2024年04月4日', "2000"],
         ['2024年04月9日', "800"],
