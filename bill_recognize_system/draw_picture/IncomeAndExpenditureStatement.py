@@ -13,8 +13,8 @@ class IncomeAndExpenditureStatement:
     def create_line_chart(self, data):
         # 过滤掉日期或收入为空的数据
         data = [row for row in data if row[0] and row[1]]
-        # 将收入转换为浮点数
-        data = [[row[0], float(row[1])] for row in data]
+        # 将收入转换为浮点数,并根据布尔值确定正负
+        data = [[row[0], float(row[1]) if row[2] else -float(row[1])] for row in data]
 
         # 将日期字符串转换为日期对象,并按日期排序
         data = sorted(data, key=lambda x: datetime.strptime(x[0], '%Y年%m月%d日'))
@@ -74,15 +74,16 @@ class IncomeAndExpenditureStatement:
 
         return img_buffer
 
+
 if __name__ == "__main__":
     data = [
-        ['2023-01', 1000],
-        ['2023-02', 1500],
-        ['2023-03', 1200],
-        ['2023-04', 1800],
-        ['2023-05', 2000],
+        ['2023年01月9日', "1000", True],
+        ['2023年2月5日', "1500", False],
+        ['2023年01月9日', "1200", False],
+        ['2023年04月3日', "1800", True],
+        ['2023年03月4日', "2000", True],
     ]
-    a=IncomeAndExpenditureStatement()
+    a = IncomeAndExpenditureStatement()
     img_buffer = a.create_line_chart(data)
 
     # 将图像保存到文件

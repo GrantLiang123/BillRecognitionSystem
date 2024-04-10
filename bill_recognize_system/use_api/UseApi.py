@@ -45,7 +45,7 @@ def create_income_table():
 
 @app.route('/MaNongBbq/incomeComparison', methods=['POST'])
 def create_income_comparison():
-    data1 = request.json['data1']
+    data1 = request.json['data']
 
     # 创建 IncomeComparisonTable 实例
     comparison_table = IC.IncomeComparisonTable()
@@ -100,7 +100,7 @@ def create_expenditure_table():
 
 @app.route('/MaNongBbq/expenditureComparison', methods=['POST'])
 def create_expenditure_comparison():
-    data1 = request.json['data1']
+    data1 = request.json['data']
 
     # 创建 IncomeComparisonTable 实例
     comparison_table = EC.ExpenditureComparisonTable()
