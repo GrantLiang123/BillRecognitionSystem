@@ -2,7 +2,7 @@ import sys
 
 sys.path.append('/home/lighthouse/BillRecognitionSystem')
 from flask import Flask, jsonify, request, send_file
-# from flask_cors import CORS
+#from flask_cors import CORS
 import bill_recognize_system.draw_picture.LedgerTable as Le
 import bill_recognize_system.draw_picture.IncomeTable as In
 import bill_recognize_system.draw_picture.IncomeComparisonTable as IC
@@ -19,9 +19,9 @@ import json
 
 
 app = Flask(__name__)
-
-
+#
 # CORS(app)
+
 
 @app.route('/MaNongBbq/ledgerTable', methods=['POST'])
 def create_ledger_table():
@@ -130,36 +130,44 @@ def regression_predict():
         use_model_name = 'linear_regression'
 
     mer_list = list(zip(date_time, y_real))
+    float_list = [float(item) for item in y_real]
 
-    result = bill_predict(y_real, is_complex_model, forecast_days, use_model_name)
+    result = bill_predict(float_list, is_complex_model, forecast_days, use_model_name)
     # 将结果作为 JSON 响应返回
     result_dict = json.loads(result)
     y_predict = result_dict['y_predict']
+    # print(y_predict)
 
     if is_income is True:
         a1 = FI.ForecastIncomeTable()
         re1 = a1.create_line_chart(mer_list, y_predict)
+        return send_file(re1, mimetype='image/png')
     else:
         a2 = FE.ForecastExpenditure()
         re2 = a2.create_line_chart(mer_list, y_predict)
-
-    return result
+        return send_file(re2, mimetype='image/png')
 
 
 @app.route('/MaNongBbq/generateXlsx01', methods=['POST'])
 def generate_xlsx01():
-    data = request.json['data']  # 从POST请求中获取JSON数据
-    a = GX.GenerateExcel()
-    file_stream = a.generate_excel_1(data, 'example.xlsx')
-    return send_file(file_stream, attachment_filename='example.xlsx', as_attachment=True)
+    if request.json and isinstance(request.json, dict) and 'data' in request.json:
+        data = request.json['data']
+        a = GX.GenerateExcel()
+        file_stream = a.generate_excel_1(data, 'example.xlsx')
+        return send_file(file_stream, attachment_filename='example.xlsx', as_attachment=True)
+    else:
+        return 'Invalid request data', 400
 
 
 @app.route('/MaNongBbq/generateXlsx02', methods=['POST'])
 def generate_xlsx02():
-    data = request.json['data']  # 从POST请求中获取JSON数据
-    a = GX.GenerateExcel()
-    file_stream = a.generate_excel_2(data, 'example.xlsx')
-    return send_file(file_stream, attachment_filename='example.xlsx', as_attachment=True)
+    if request.json and isinstance(request.json, dict) and 'data' in request.json:
+        data = request.json['data']
+        a = GX.GenerateExcel()
+        file_stream = a.generate_excel_2(data, 'example.xlsx')
+        return send_file(file_stream, attachment_filename='example.xlsx', as_attachment=True)
+    else:
+        return 'Invalid request data', 400
 
 
 if __name__ == '__main__':
