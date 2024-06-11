@@ -102,6 +102,7 @@ class RegressionPrediction:
         self.forecast_days: int = forecast_days  # 预测天数
         self.use_model_name = ModelName[use_model_name]  # 使用的回归模型
         self.return_list = ['y_predict', 'is_correct', 'predict_accuracy', 'model_name']  # API返回的JSON标签
+
     #
     # def select_model(self, use_model_name):
     #     """
@@ -140,7 +141,6 @@ class RegressionPrediction:
         elif use_model_name == ModelName.gradient_boosting_regressor:
             return self.model_gbr
 
-
     def train_model_easy(self, y_train_initial: list):
         """
         简单回归分析。
@@ -163,7 +163,7 @@ class RegressionPrediction:
         x_initial = list(range(1, len(y_train) + 1))
         x_pre_initial = list(range(len(y_train) + 1, len(y_train) + 2 + self.forecast_days + 1))
         min_accuracy = 10.0
-        min_y_pre = []
+        min_y_pre = np.array([])
         for degree in range(2, 100):
             # print(degree)
             x_train = data_ascension(x_initial, degree)
@@ -264,8 +264,9 @@ def bill_predict(y_real: list, is_complex_model: bool = False, forecast_days: in
 
 if __name__ == '__main__':
     # rep = RegressionPrediction(forecast_days=4, use_model_name='elastic_net')
-    y = [12, 23, 32, 14, 53]
-    y_p = bill_predict(y, is_complex_model=True, )
+    #y = [12, 23, 32, 14, 53]
+    y = [12, 23, 32, 14]
+    y_p = bill_predict(y, is_complex_model=False, )
     result_dict=json.loads(y_p)
     y_predict = result_dict['y_predict']
 
